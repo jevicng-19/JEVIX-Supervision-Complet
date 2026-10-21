@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}Résoudre une alerte{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+
+    <h2>Résolution d'une alerte</h2>
+
+    <p class="form-description">
+        Décrivez la cause de l'incident ainsi que les actions effectuées.
+    </p>
+
+    <form method="POST">
+
+        <div class="form-group">
+
+            <label>Diagnostic</label>
+
+            <textarea
+                name="diagnostic"
+                rows="8"
+                class="form-control"
+                placeholder="Exemple : Utilisation CPU anormale causée par un processus Python. Le processus a été arrêté et la machine est revenue à un fonctionnement normal."
+                required></textarea>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="btn-save">
+
+                Résoudre l'alerte
+
+            </button>
+
+            <a
+                href="{{ url_for('alertes') }}"
+                class="btn-cancel">
+
+                Annuler
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Administrateurs - JEVIX
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+        <h1 class="page-title">Administrateurs</h1>
+        <p class="page-description">
+            Liste des comptes autorisés à accéder à JEVIX.
+        </p>
+    </div>
+
+    {% if role == "superadmin" %}
+
+        <a href="/ajouter-admin" class="btn-primary">
+            + Nouvel administrateur
+        </a>
+
+    {% endif %}
+
+</div>
+
+
+<div class="table-container">
+
+    <table class="admin-table">
+
+        <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Nom d'utilisateur</th>
+                <th>Rôle</th>
+                <th>Date de création</th>
+
+                {% if role == "superadmin" %}
+                    <th>Actions</th>
+                {% endif %}
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for admin in admins %}
+
+            <tr>
+
+                <td>
+                    {{ admin.id }}
+                </td>
+
+                <td>
+
+                    <div class="admin-user">
+
+                        <div class="admin-avatar">
+                            {{ admin.username[0]|upper }}
+                        </div>
+
+                        <strong>
+                            {{ admin.username }}
+                        </strong>
+
+                    </div>
+
+                </td>
+
+                <td>
+
+                    {% if admin.role == "superadmin" %}
+
+                        <span class="badge-superadmin">
+                            Super Admin
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge-admin">
+                            Admin
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+                    {{ admin.date_creation }}
+                </td>
+
+
+                {% if role == "superadmin" %}
+
+                <td class="admin-actions">
+                    {% if admin.id != session["user_id"] %}
+
+                    <a
+                        href="/supprimer-admin/{{ admin.id }}"
+                        class="btn-delete"
+                        onclick="return confirm('Voulez-vous supprimer cet administrateur ?')">
+
+                        Supprimer
+
+                    </a>
+
+                    {% endif %}
+
+                </td>
+
+                {% endif %}
+
+            </tr>
+
+            {% else %}
+
+            <tr>
+
+                <td colspan="5" class="empty-table">
+
+                    Aucun administrateur enregistré.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

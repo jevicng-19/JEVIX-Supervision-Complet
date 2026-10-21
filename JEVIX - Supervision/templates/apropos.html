@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %}
+À propos - JEVIX
+{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">À propos de JEVIX</h1>
+
+<div class="about-card">
+
+    <section class="about-section">
+
+        <h2>Présentation</h2>
+
+        <p>
+            JEVIX est une application de supervision informatique conçue
+            pour centraliser et surveiller l'état des machines d'un réseau.
+            Elle permet aux administrateurs de consulter les informations
+            système, réseau et les performances des postes supervisés depuis
+            une interface web centralisée.
+        </p>
+
+    </section>
+
+
+    <section class="about-section">
+
+        <h2>Fonctionnement</h2>
+
+        <p>
+            Chaque machine supervisée exécute un agent développé en Python.
+            Cet agent collecte périodiquement les informations du système
+            et les transmet au serveur JEVIX.
+        </p>
+
+        <p>
+            Le serveur traite les données reçues, les enregistre dans la
+            base de données et les affiche sur le tableau de bord de
+            supervision.
+        </p>
+
+    </section>
+
+
+    <section class="about-section">
+
+        <h2>Objectifs</h2>
+
+        <ul>
+            <li>Centraliser la supervision des machines.</li>
+            <li>Visualiser l'état des postes en temps réel.</li>
+            <li>Surveiller l'utilisation du CPU, de la RAM et du disque.</li>
+            <li>Consulter les informations système et réseau.</li>
+            <li>Détecter les machines en ligne et hors ligne.</li>
+            <li>Faciliter le travail des administrateurs informatiques.</li>
+        </ul>
+
+    </section>
+
+
+    <section class="about-section">
+
+        <h2>Technologies utilisées</h2>
+
+        <div class="tech-grid">
+
+            <span>Python</span>
+            <span>Flask</span>
+            <span>MySQL</span>
+            <span>HTML5</span>
+            <span>CSS3</span>
+            <span>JavaScript</span>
+            <span>Psutil</span>
+
+        </div>
+
+    </section>
+
+
+    <section class="about-section about-footer">
+
+        <h2>JEVIX Supervision</h2>
+
+        <p>
+            Application de supervision et de gestion centralisée
+            des machines informatiques.
+        </p>
+
+        <strong>Version 1.0 — 2026</strong>
+
+    </section>
+
+</div>
+
+{% endblock %}

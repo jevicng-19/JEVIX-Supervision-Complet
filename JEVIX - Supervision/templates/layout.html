@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}JEVIX{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+
+                <img
+                    src="{{ url_for('static', filename='images/logo.PNG') }}"
+                    alt="Logo JEVIX">
+
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+                <a href="{{ url_for('dashboard') }}">
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('alertes') }}">
+                    Alertes
+
+                    {% if notification_alertes > 0 %}
+
+                    <span class="notification-badge">
+
+                    {{ notification_alertes }}
+
+                    </span>
+
+                    {% endif %}
+                </a>
+
+                <a href="{{ url_for('admins') }}">
+                    Administrateurs
+                </a>
+
+                <a href="{{ url_for('apropos') }}">
+                    À propos
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <main class="main-area">
+
+            <header class="topbar">
+
+                <div class="topbar-title">
+                    JEVIX Supervision
+                </div>
+
+                <a href="{{ url_for('profil') }}"
+                   class="profile-button">
+
+                    Profil
+
+                </a>
+
+            </header>
+
+
+            <section class="page-content">
+
+                {% block content %}
+
+                {% endblock %}
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block title %}Ajouter un administrateur{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+
+    <h2>Ajouter un administrateur</h2>
+
+    <p class="form-description">
+        Créez un nouveau compte administrateur pour accéder au système JEVIX.
+    </p>
+
+    {% if erreur %}
+
+    <div class="alert alert-danger">
+
+        {{ erreur }}
+
+    </div>
+
+    {% endif %}
+
+    <form method="POST">
+
+        <div class="form-group">
+
+            <label>Nom d'utilisateur</label>
+
+            <input
+                type="text"
+                name="username"
+                class="form-control"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Mot de passe</label>
+
+            <input
+                type="password"
+                name="password"
+                class="form-control"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Rôle</label>
+
+            <select
+                name="role"
+                class="form-control">
+
+                <option value="admin">
+
+                    Administrateur
+
+                </option>
+
+                <option value="superadmin">
+
+                    Super Administrateur
+
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="btn-save">
+
+                Ajouter
+
+            </button>
+
+            <a
+                href="{{ url_for('admins') }}"
+                class="btn-cancel">
+
+                Annuler
+
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

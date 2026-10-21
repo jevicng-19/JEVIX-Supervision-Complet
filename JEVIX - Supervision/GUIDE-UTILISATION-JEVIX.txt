@@ -1,0 +1,101 @@
+JEVIX SUPERVISION — GUIDE D'UTILISATION
+=======================================
+
+1. À QUOI SERT LE PROJET ?
+
+JEVIX Supervision se compose de trois parties : le serveur Flask affiche le tableau de bord, MySQL conserve les comptes et données, et un agent Windows envoie les mesures de chaque ordinateur surveillé. Les agents envoient périodiquement les informations. Une machine est marquée hors ligne après environ 20 secondes sans nouvelles données.
+
+GitHub conserve le code. Il ne fait pas tourner automatiquement Flask ni MySQL. Le projet est configuré pour fonctionner sur un réseau local. Un hébergement public du site nécessite aussi un serveur web et une base de données accessibles sur Internet.
+
+2. CONTENU DU DOSSIER
+
+- "JEVIX - Supervision" : code source, pages du site, base SQL, scripts de démarrage et documentation technique.
+- "agent-windows" : agent déjà compilé pour Windows 64 bits et scripts de démarrage automatique.
+- Ce fichier : guide simplifié.
+
+3. PREMIER DÉMARRAGE DU SERVEUR
+
+Fais ces étapes sur l'ordinateur qui hébergera le serveur.
+
+A. Décompresse l'archive, par exemple dans Documents\JEVIX.
+
+B. Ouvre XAMPP et démarre MySQL. Démarre aussi Apache si tu utilises phpMyAdmin.
+
+C. Crée la base une seule fois pour une nouvelle installation :
+   1. Ouvre http://localhost/phpmyadmin dans ton navigateur.
+   2. Clique sur Importer et choisis "Jevix.sql" dans le dossier "JEVIX - Supervision".
+   3. Clique sur Exécuter.
+   Ne réimporte pas ce fichier dans une base déjà utilisée : cela peut perturber les données existantes.
+
+D. Installe Python sur le serveur si nécessaire. Ouvre le dossier "JEVIX - Supervision" dans l'Explorateur de fichiers, clique dans la barre d'adresse, tape powershell et appuie sur Entrée. Dans la fenêtre qui s'ouvre, exécute :
+
+   py -m pip install -r requirements-server.txt
+
+E. Crée une clé privée pour Flask, une seule fois sur cette machine :
+
+   py generer_cle_flask.py
+
+   Cela crée le fichier caché ".flask_secret". Garde-le sur le serveur. Ne le supprime pas et ne le publie pas sur GitHub.
+
+F. Crée ton premier compte administrateur :
+
+   py creer_premier_admin.py
+
+   Saisis le nom de compte et le mot de passe que tu veux utiliser sur le site. Le script enregistre un hash du mot de passe dans MySQL. Sur la page de connexion, saisis le mot de passe normal choisi ici, jamais le hash.
+
+G. Démarre le serveur :
+
+   py serveurFlask.py
+
+   Garde cette fenêtre ouverte. Sur le serveur, ouvre http://127.0.0.1:5000 et connecte-toi avec le compte de l'étape F.
+
+4. SE CONNECTER DEPUIS UN AUTRE ORDINATEUR
+
+Le serveur et le client doivent être sur le même réseau local.
+
+A. Sur le serveur, ouvre PowerShell, exécute ipconfig et relève l'adresse IPv4 de la carte connectée au réseau, par exemple 192.168.1.20.
+
+B. Depuis l'autre ordinateur, ouvre http://192.168.1.20:5000 dans le navigateur, en remplaçant l'exemple par l'adresse trouvée. Flask et MySQL doivent rester démarrés. Si Windows Firewall demande l'autorisation réseau, autorise Python sur le réseau privé.
+
+5. INSTALLER L'AGENT SUR UN POSTE CLIENT
+
+A. Copie tout le contenu de "agent-windows" sur le poste client : JEVIX-Agent.exe, agent_config.json, les scripts activer_demarrage_auto et desactiver_demarrage_auto, et LISEZ-MOI.txt.
+
+B. Ouvre agent_config.json avec le Bloc-notes. Remplace l'adresse d'exemple par l'adresse IP du serveur en gardant /metrics à la fin, par exemple :
+
+   http://192.168.1.20:5000/metrics
+
+Enregistre. Le fichier doit rester dans le même dossier que JEVIX-Agent.exe.
+
+C. Double-clique sur JEVIX-Agent.exe. Python n'a pas besoin d'être installé sur le poste client. L'agent doit rester lancé pendant la supervision.
+
+D. Pour lancer l'agent automatiquement à chaque ouverture de session Windows, double-clique une fois sur activer_demarrage_auto.cmd. Cela lance aussi l'agent tout de suite. Pour désactiver ce démarrage, double-clique sur desactiver_demarrage_auto.cmd.
+
+6. COMPTES ET CLÉ SECRÈTE
+
+Le premier compte créé par creer_premier_admin.py est un super administrateur. Le mot de passe est haché avant stockage dans la base. Il n'existe pas de mot de passe universel : utilise celui choisi à la création.
+
+La clé .flask_secret ne sert pas à se connecter. Elle protège les sessions du navigateur et reste privée sur le serveur. L'archive ne contient aucune clé. Le fichier est exclu de Git avec .gitignore.
+
+Sur un nouveau serveur, crée une clé et un compte en suivant les étapes E et F. La base de données n'est pas dans GitHub ; fais-en une sauvegarde séparée si tu veux conserver les comptes et les anciennes données.
+
+7. SI ÇA NE MARCHE PAS
+
+- "Clé Flask absente" : lance py generer_cle_flask.py dans le dossier du serveur.
+- Erreur MySQL : vérifie que MySQL tourne et que Jevix.sql a été importé.
+- Erreur de mot de passe MySQL : par défaut, les scripts utilisent l'utilisateur root avec un mot de passe vide (installation XAMPP courante). Si tu as défini un mot de passe MySQL, modifie la valeur password dans serveurFlask.py et creer_premier_admin.py. C'est différent du mot de passe du site.
+- Page inaccessible : vérifie que la fenêtre du serveur est ouverte et que l'adresse/port est correct.
+- Agent absent du tableau de bord : vérifie l'adresse dans agent_config.json, le réseau, le pare-feu et que Flask est lancé.
+- Machine pas encore marquée hors ligne : attends environ 20 secondes après l'arrêt de l'agent.
+- Connexion refusée : saisis le mot de passe normal du compte, pas le hash affiché dans MySQL.
+
+8. METTRE LE PROJET SUR GITHUB
+
+1. Décompresse l'archive.
+2. Sur GitHub, crée un nouveau dépôt. Choisis privé si tu ne veux pas rendre le code visible à tout le monde. Ne demande pas à GitHub de créer un README, un .gitignore ou une licence : ces fichiers sont déjà fournis.
+3. Installe et ouvre GitHub Desktop et connecte-toi à ton compte.
+4. Clone le dépôt que tu viens de créer sur ton ordinateur.
+5. Copie le contenu de l'archive dans le dossier cloné. Si Windows demande de remplacer les fichiers existants, accepte. Ne supprime pas le dossier caché .git du dossier cloné.
+6. Dans GitHub Desktop, vérifie l'onglet Changes, écris un résumé, clique Commit to main, puis Push origin.
+
+Ne publie jamais .flask_secret, un mot de passe ou une sauvegarde de la base MySQL. Le code sur GitHub et le serveur qui exécute le site sont deux choses séparées.

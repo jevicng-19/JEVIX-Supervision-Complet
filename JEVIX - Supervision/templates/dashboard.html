@@ -1,0 +1,264 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Dashboard - JEVIX
+{% endblock %}
+
+{% block content %}
+
+<meta http-equiv="refresh" content="5">
+
+<h1 class="page-title">Dashboard</h1>
+
+<div class="stats">
+
+    <div class="stat-card">
+        <span>Machines supervisées</span>
+        <strong>{{ machines|length }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>Machines en ligne</span>
+        <strong>{{ online_count }}</strong>
+    </div>
+
+    <div class="stat-card">
+        <span>État général</span>
+        <strong>{{ etat_general }} %</strong>
+    </div>
+
+</div>
+
+
+<div class="machines">
+
+    {% for machine in machines %}
+
+    <article class="machine-card">
+
+        <div class="machine-header">
+
+            <div>
+                <h2>{{ machine.hostname }}</h2>
+                <span>{{ machine.ip }}</span>
+            </div>
+
+            {% if machine.online %}
+
+                <span class="status online">
+                    ● En ligne
+                </span>
+
+            {% else %}
+
+                <span class="status offline">
+                    ● Hors ligne
+                </span>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="machine-section">
+
+            <h3>Informations système</h3>
+
+            <div class="info-grid">
+
+                <div>
+                    <span>Utilisateur</span>
+                    <strong>{{ machine.username }}</strong>
+                </div>
+
+                <div>
+                    <span>Système</span>
+                    <strong>{{ machine.os }}</strong>
+                </div>
+
+                <div>
+                    <span>Version</span>
+                    <strong>{{ machine.os_version }}</strong>
+                </div>
+
+                <div>
+                    <span>Architecture</span>
+                    <strong>{{ machine.architecture }}</strong>
+                </div>
+
+                <div>
+                    <span>Cœurs CPU</span>
+                    <strong>{{ machine.cpu_cores }}</strong>
+                </div>
+
+                <div>
+                    <span>Processus actifs</span>
+                    <strong>{{ machine.process_count }}</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="machine-section">
+
+            <h3>Utilisation des ressources</h3>
+
+            <div class="resource">
+
+                <div class="resource-label">
+                    <span>CPU</span>
+                    <strong>{{ machine.cpu_percent }} %</strong>
+                </div>
+
+                <progress
+                    value="{{ machine.cpu_percent }}"
+                    max="100">
+                </progress>
+
+            </div>
+
+
+            <div class="resource">
+
+                <div class="resource-label">
+                    <span>RAM</span>
+                    <strong>{{ machine.ram_used_percent }} %</strong>
+                </div>
+
+                <progress
+                    value="{{ machine.ram_used_percent }}"
+                    max="100">
+                </progress>
+
+            </div>
+
+
+            <div class="resource">
+
+                <div class="resource-label">
+                    <span>Disque</span>
+                    <strong>{{ machine.disk_used_percent }} %</strong>
+                </div>
+
+                <progress
+                    value="{{ machine.disk_used_percent }}"
+                    max="100">
+                </progress>
+
+            </div>
+
+        </div>
+
+
+        <div class="machine-section">
+
+            <h3>Mémoire et stockage</h3>
+
+            <div class="info-grid">
+
+                <div>
+                    <span>RAM totale</span>
+                    <strong>{{ machine.ram_total_gb }} Go</strong>
+                </div>
+
+                <div>
+                    <span>RAM disponible</span>
+                    <strong>{{ machine.ram_available_gb }} Go</strong>
+                </div>
+
+                <div>
+                    <span>Disque total</span>
+                    <strong>{{ machine.disk_total_gb }} Go</strong>
+                </div>
+
+                <div>
+                    <span>Disque libre</span>
+                    <strong>{{ machine.disk_free_gb }} Go</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="machine-section">
+
+            <h3>Informations réseau</h3>
+
+            <div class="info-grid">
+
+                <div>
+                    <span>Adresse IP</span>
+                    <strong>{{ machine.ip }}</strong>
+                </div>
+
+                <div>
+                    <span>Données envoyées</span>
+                    <strong>{{ machine.bytes_sent }} octets</strong>
+                </div>
+
+                <div>
+                    <span>Données reçues</span>
+                    <strong>{{ machine.bytes_recv }} octets</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="machine-section">
+
+            <h3>Disponibilité</h3>
+
+            <div class="info-grid">
+
+                <div>
+                    <span>Dernière mise à jour</span>
+                    <strong>{{ machine.last_update }}</strong>
+                </div>
+
+                <div>
+                    <span>Santé estimée</span>
+                    <strong>{{ machine.health }} %</strong>
+                </div>
+
+                <div>
+                    <span>Batterie</span>
+
+                    {% if machine.battery_percent is not none %}
+
+                        <strong>
+                            {{ machine.battery_percent }} %
+                        </strong>
+
+                    {% else %}
+
+                        <strong>Non disponible</strong>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </article>
+
+    {% else %}
+
+    <div class="empty-state">
+        <h2>Aucune machine supervisée</h2>
+        <p>
+            Lance un agent pour commencer à recevoir les informations.
+        </p>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

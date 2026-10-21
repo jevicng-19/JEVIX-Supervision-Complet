@@ -1,0 +1,10 @@
+.venv/
+.venv-test/
+.venv-runtime/
+build-deps/
+build/
+dist/
+*.spec
+__pycache__/
+.flask_secret
+/agent_config.json

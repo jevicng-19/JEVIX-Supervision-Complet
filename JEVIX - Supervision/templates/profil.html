@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Profil - JEVIX
+{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">Mon profil</h1>
+
+<div class="profile-card">
+
+    <div class="profile-header">
+
+        <div class="profile-avatar">
+            {{ username[0]|upper }}
+        </div>
+
+        <div class="profile-identity">
+            <h2>{{ username }}</h2>
+
+            {% if role == "superadmin" %}
+                <span class="role-badge">Super Administrateur</span>
+            {% else %}
+                <span class="role-badge">Administrateur</span>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="profile-section">
+
+        <h3>Informations du compte</h3>
+
+        <div class="profile-info">
+
+            <div>
+                <span>Nom d'utilisateur</span>
+                <strong>{{ username }}</strong>
+            </div>
+
+            <div>
+                <span>Rôle</span>
+
+                {% if role == "superadmin" %}
+                    <strong>Super Administrateur</strong>
+                {% else %}
+                    <strong>Administrateur</strong>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="profile-actions">
+
+        <a href="{{ url_for('modifier_profil') }}"
+           class="btn-save">
+            Modifier
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="btn-danger">
+            Déconnexion
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

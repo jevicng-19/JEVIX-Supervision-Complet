@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block title %}Alertes{% endblock %}
+
+{% block content %}
+
+<meta http-equiv="refresh" content="5">
+
+<div class="container">
+
+    <div class="stats">
+        <div class="stat-card"><h3>Alertes actives</h3><p>{{ total_alertes }}</p></div>
+        <div class="stat-card"><h3>Critiques</h3><p>{{ critiques }}</p></div>
+        <div class="stat-card"><h3>En cours</h3><p>{{ en_cours }}</p></div>
+        <div class="stat-card"><h3>Résolues</h3><p>{{ resolues }}</p></div>
+    </div>
+
+    <h2 class="page-title">Alertes de sécurité</h2>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Machine</th>
+                <th>Type</th>
+                <th>Gravité</th>
+                <th>Valeur</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Responsable</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for alerte in alertes %}
+
+        <tr>
+            <td>
+                <div class="admin-user">
+                    <div class="admin-avatar">{{ alerte.hostname[0]|upper }}</div>
+                    <strong>{{ alerte.hostname }}</strong>
+                </div>
+            </td>
+
+            <td>{{ alerte.type }}</td>
+
+            <td>
+                {% if alerte.gravite=="CRITIQUE" %}
+                <span class="badge badge-danger">🔴 Critique</span>
+                {% elif alerte.gravite=="ELEVE" %}
+                <span class="badge badge-warning">🟠 Élevée</span>
+                {% elif alerte.gravite=="MOYEN" %}
+                <span class="badge badge-info">🔵 Moyenne</span>
+                {% else %}
+                <span class="badge badge-success">🟢 Faible</span>
+                {% endif %}
+            </td>
+
+            <td><strong>{{ alerte.valeur }}</strong></td>
+
+            <td>
+                {% if alerte.statut=="NOUVELLE" %}
+                <span class="badge badge-danger">Nouvelle</span>
+                {% elif alerte.statut=="EN_COURS" %}
+                <span class="badge badge-primary">En cours</span>
+                {% else %}
+                <span class="badge badge-success">Résolue</span>
+                {% endif %}
+            </td>
+
+            <td>{{ alerte.date_detection.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ alerte.admin_nom or "-" }}</td>
+
+            <td class="admin-actions">
+                {% if alerte.statut=="NOUVELLE" %}
+                <a href="{{ url_for('prendre_alerte', id=alerte.id) }}" class="btn-edit">Prendre en charge</a>
+                {% elif alerte.statut=="EN_COURS" %}
+                <a href="{{ url_for('resoudre_alerte', id=alerte.id) }}" class="btn-resoudre">Résoudre</a>
+                {% else %}
+                <span class="badge-admin">✔ Résolue</span>
+                {% endif %}
+            </td>
+        </tr>
+
+        {% if alerte.statut=="RESOLUE" %}
+        <tr class="diagnostic-row">
+            <td colspan="8">
+                <div class="diagnostic-content">
+                    <strong>Diagnostic :</strong>
+                    {{ alerte.diagnostic or "Aucun diagnostic n'a été renseigné." }}
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+
+        {% else %}
+        <tr>
+            <td colspan="8" class="empty-table">
+                Aucune alerte enregistrée.
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+JEVIX Supervision — Agent Windows
+
+1. Ouvre agent_config.json dans le Bloc-notes et remplace l'adresse d'exemple
+   par l'adresse du serveur Flask, par exemple http://192.168.1.20:5000/metrics.
+2. Enregistre le fichier dans le même dossier que JEVIX-Agent.exe.
+3. Lance JEVIX-Agent.exe pour le démarrer manuellement.
+
+Pour le démarrage automatique :
+- Double-clique sur activer_demarrage_auto.cmd une seule fois. Il crée une tâche
+  au nom de ta session Windows, démarre l'agent tout de suite et le relancera à
+  chaque ouverture de session.
+- Double-clique sur desactiver_demarrage_auto.cmd pour arrêter l'agent et
+  retirer cette tâche.
+
+Python n'a pas besoin d'être installé sur le PC client. Le serveur Flask doit
+être démarré et le pare-feu du serveur doit autoriser le port configuré.
+L'exécutable fourni est destiné à Windows 64 bits.
